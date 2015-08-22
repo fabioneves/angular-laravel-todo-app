@@ -12,4 +12,5 @@
 */
 
 Route::get('/', 'IndexController@getIndex');
-Route::resource('api', 'ApiController');
+Route::resource('api/todo', 'TodoController',
+  ['except' => ['create', 'show', 'edit']]);
