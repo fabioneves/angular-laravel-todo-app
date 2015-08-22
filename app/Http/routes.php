@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'IndexController@getIndex');
+Route::resource('api', 'ApiController');
