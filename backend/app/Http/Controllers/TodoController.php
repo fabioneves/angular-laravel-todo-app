@@ -16,7 +16,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return Todo::all();
+        return Todo::all(['id', 'text', 'done']);
     }
 
     /**
