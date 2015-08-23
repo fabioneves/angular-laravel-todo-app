@@ -24,7 +24,8 @@ class TodoRequest extends Request
     public function rules()
     {
         return [
-            'text' => 'required'
+            'text' => 'required',
+            'done' => 'boolean'
         ];
     }
 }

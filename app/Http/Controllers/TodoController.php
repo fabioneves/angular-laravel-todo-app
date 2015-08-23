@@ -33,6 +33,7 @@ class TodoController extends Controller
 
         // Get the todo text from the request.
         $todo->text = $request->input('text');
+        $todo->done = $request->input('done');
 
         // Try to save the todo in the database.
         try {
@@ -61,8 +62,9 @@ class TodoController extends Controller
         // Check if we have a todo, if yes, modify it.
         if (!empty($todo)) {
 
-            // Get the todo text from the request.
+            // Get the todo details from the request.
             $todo->text = $request->input('text');
+            $todo->done = $request->input('done');
 
             // Try to save the todo in the database.
             try {
