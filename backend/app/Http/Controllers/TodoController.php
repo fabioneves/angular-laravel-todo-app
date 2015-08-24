@@ -32,16 +32,13 @@ class TodoController extends Controller
      */
     public function store(TodoRequest $request)
     {
-        // New todo.
-        $todo = new Todo();
-
-        // Get the todo text from the request.
-        $todo->text = $request->input('text');
-        $todo->done = $request->input('done');
-
         // Try to save the todo in the database.
         try {
-            $todo->save();
+            // New todo.
+            $todo = Todo::create([
+              'text' => $request->input('text'),
+              'done' => $request->input('done')
+            ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -50,7 +47,7 @@ class TodoController extends Controller
         Cache::forget('todos.all');
 
         // Todo was stored.
-        return ['success' => true];
+        return ['success' => true, 'id' => $todo->id];
     }
 
     /**

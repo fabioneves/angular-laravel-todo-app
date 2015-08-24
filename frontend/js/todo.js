@@ -16,7 +16,7 @@ angular.module('todoApp', [])
                 $http.post(config.backend, {text: todoList.todoText, done: false})
                     .success(function (response) {
                         // Update DOM.
-                        todoList.todos.push({text: todoList.todoText, done: false});
+                        todoList.todos.push({id: response.id, text: todoList.todoText, done: false});
                         todoList.todoText = '';
                     });
             }
