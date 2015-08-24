@@ -2,3 +2,7 @@
     text-decoration: line-through;
     color: grey;
 }
+
+.todo-link:hover {
+    text-decoration: none;
+}

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Angular todo app</title>
 
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/todo.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
@@ -14,21 +14,28 @@
 </head>
 <body>
 
-<h2>Todo</h2>
+<div class="container">
+  <h2>Todo List</h2>
 
-<div ng-controller="TodoListController as todoList">
-  <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
-  <ul class="unstyled">
-    <li ng-repeat="todo in todoList.todos">
-      <input type="hidden" ng-model="todo.id">
-      <input type="checkbox" ng-change="todoList.updateTodo()" ng-model="todo.done">
-      <span class="done-@{{todo.done}}">{{todo.text}}</span>
-    </li>
-  </ul>
-  <form ng-submit="todoList.addTodo()">
-    <input type="text" ng-model="todoList.todoText" size="30" placeholder="add new todo here">
-    <input class="btn btn-primary" type="submit" value="add">
-  </form>
+  <div ng-controller="TodoListController as todoList">
+    <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
+    <ul class="list-unstyled">
+      <li ng-repeat="todo in todoList.todos" ng-init="editing = false; mousehover = false" ng-mouseenter="mousehover = true" ng-mouseleave="mousehover = false">
+        <input type="checkbox" ng-change="todoList.updateTodo(todo)" ng-model="todo.done">
+        <span ng-hide="editing" ng-click="todoList.setTodoDone(todo)" class="done-{{todo.done}}">{{todo.text}}</span>
+        <input ng-show="editing" ng-model="todo.text" ng-enter="editing=true" autofocus>
+        <a ng-show="editing" ng-hide="!editing" href ng-click="editing=false;todoList.updateTodo(todo)" class="todo-link glyphicon glyphicon-ok"></a>
+        <a ng-show="mousehover" ng-hide="editing || !mousehover" href ng-click="editing=true;todoList.updateTodo(todo)" class="todo-link glyphicon glyphicon-edit"></a>
+        <a ng-show="mousehover" ng-hide="editing || !mousehover" href ng-click="todoList.deleteTodo(todo)" class="todo-link glyphicon glyphicon-trash"></a>
+      </li>
+    </ul>
+    <form class="form-inline" ng-submit="todoList.addTodo()">
+      <input type="text" class="form-control" ng-model="todoList.todoText" size="30" placeholder="type your todo here">
+      <input class="btn btn-primary" type="submit" value="add">
+      <input ng-click="todoList.clearCompleted()" class="btn btn-danger" type="button" value="delete completed">
+    </form>
+  </div>
 </div>
+
 </body>
 </html>

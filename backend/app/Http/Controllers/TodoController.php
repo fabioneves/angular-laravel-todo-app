@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Requests\TodoRequest;
 use App\Todo;
+use Illuminate\Support\Facades\Cache;
 
 class TodoController extends Controller
 {
@@ -16,7 +17,10 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return Todo::all(['id', 'text', 'done']);
+        $todos = Cache::rememberForever('todos.all', function () {
+            return Todo::all(['id', 'text', 'done']);
+        });
+        return $todos;
     }
 
     /**
@@ -41,6 +45,9 @@ class TodoController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+
+        // Clear cache.
+        Cache::forget('todos.all');
 
         // Todo was stored.
         return ['success' => true];
@@ -73,6 +80,9 @@ class TodoController extends Controller
                 return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
             }
 
+            // Clear cache.
+            Cache::forget('todos.all');
+
             // Todo was saved.
             return ['success' => true];
         }
@@ -90,7 +100,34 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
+        // Delete an item.
         $delete = Todo::destroy($id);
+
+        // Clear cache if the item is deleted.
+        if ($delete) {
+            Cache::forget('todos.all');
+        }
+
+        // Returns response.
+        return ['success' => (bool) $delete];
+    }
+
+    /**
+     * Remove all the completed todos from the storage.
+     *
+     * @return Response
+     */
+    public function postDestroyCompleted()
+    {
+        // Delete an item.
+        $delete = Todo::where('done', 1)->delete();
+
+        // Clear cache if the item is deleted.
+        if ($delete) {
+            Cache::forget('todos.all');
+        }
+
+        // Returns response.
         return ['success' => (bool) $delete];
     }
 

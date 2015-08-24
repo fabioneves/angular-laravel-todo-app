@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'IndexController@getIndex');
 Route::resource('api/todo', 'TodoController',
   ['except' => ['create', 'show', 'edit']]
 );
+Route::post('api/todo/deldone', 'TodoController@postDestroyCompleted');
