@@ -23,7 +23,7 @@
       <li ng-repeat="todo in todoList.todos" ng-init="editing = false; mousehover = false" ng-mouseenter="mousehover = true" ng-mouseleave="mousehover = false">
         <input type="checkbox" ng-change="todoList.updateTodo(todo)" ng-model="todo.done">
         <span ng-hide="editing" ng-click="todoList.setTodoDone(todo)" class="done-{{todo.done}}">{{todo.text}}</span>
-        <input ng-show="editing" ng-model="todo.text" ng-enter="editing=true" autofocus>
+        <input ng-show="editing" ng-model="todo.text" ng-enter="editing=false;todoList.updateTodo(todo)" autofocus>
         <a ng-show="editing" ng-hide="!editing" href ng-click="editing=false;todoList.updateTodo(todo)" class="todo-link glyphicon glyphicon-ok"></a>
         <a ng-show="mousehover" ng-hide="editing || !mousehover" href ng-click="editing=true;todoList.updateTodo(todo)" class="todo-link glyphicon glyphicon-edit"></a>
         <a ng-show="mousehover" ng-hide="editing || !mousehover" href ng-click="todoList.deleteTodo(todo)" class="todo-link glyphicon glyphicon-trash"></a>
